@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.mq.admincenter.mapper.center_topic_mapper">
+
+    <select id="findAll" resultType="center_topic">
+        SELECT *
+        FROM center_topic
+    </select>
+    <insert id="add" parameterType="center_topic"   keyProperty="topicName">
+        insert into center_topic(topicName, description, `partition`, replicationFactor) values(#{topicName}, #{description}, #{partition}, #{replicationFactor})
+    </insert>
+    <delete id="delete" >
+        delete from center_topic
+        where topicName=#{0}
+    </delete>
+</mapper>

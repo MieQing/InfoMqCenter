@@ -1,0 +1,6 @@
+server:
+  port: 6902
+
+spring:
+  kafka:
+    bootstrap-servers: #kafak地址 111.111.111.111:9093

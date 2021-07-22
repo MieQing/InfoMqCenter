@@ -1,0 +1,62 @@
+project:
+  env: dev
+server:
+  port: 6901
+  tomcat:
+    max-http-form-post-size: -1
+
+
+
+zookeeper:
+  address:  #ZK连接地址 格式如111.111.111.111:10086 后面不需要加上根目录路径
+  rootnode: /MqCenter  #ZK节点根目录
+  actConsumer: /MqCenter/ConsumerList #当前运行的消费者执行器根节点，此处如果有消费者接入，会创建临时节点，同时center会监视是否掉线
+  conTaskList: /MqCenter/ConTaskList #每个Consumer中具体的执行任务
+  workList: /MqCenter/WorkList #每个Consumer中具体的执行线程
+
+
+mybatis:
+  type-aliases-package: info.mq.infoconsumer.model
+  mapper-locations: classpath:/mybatis-mapper/*Mapper.xml
+
+
+spring:
+  datasource:
+    url: #数据库地址 jdbc:mysql://111.111.111.111:3306/info_mq_center?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: #数据库连接账号
+    password: #数据库连接密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: #邮件服务器地址 如：smtp.qq.com
+    port: 465
+    username: #发邮件的账号
+    password: #邮件密码
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+  kafka:
+    bootstrap-servers: #kafaka连接地址 111.111.111.111:9093
+  #基于eureka注册的微服务，没有的话可以排除
+#  application:
+#    name: Node1
+
+
+#基于eureka注册的微服务，没有的话可以排除
+
+eureka:
+  client:
+    enabled: false #此处使用时记得改为true 打开
+#    service-url:
+#      defaultZone: http://euk.com:6904/eureka/
+#provider:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+
+
+mynode: Node1  #当前执行的节点，对应执行器管理中的Code

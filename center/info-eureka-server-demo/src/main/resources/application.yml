@@ -1,0 +1,11 @@
+server:
+  port: 6904
+
+eureka:
+  instance:
+    hostname: EurekaServer
+  client:
+    registerWithEureka: false #单机测试demo 所以改成false
+    fetchRegistry: false #单机测试demo 所以改成false
+    serviceUrl:
+      defaultZone: http://euk.com:6904/eureka/

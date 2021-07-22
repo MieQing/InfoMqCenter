@@ -1,0 +1,12 @@
+
+server:
+  port: 6905
+eureka:
+  client:
+    service-url:
+      defaultZone: http://euk.com:6904/eureka/
+
+spring:
+  application:
+    name: provider
+

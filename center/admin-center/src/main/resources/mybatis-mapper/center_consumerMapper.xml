@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.mq.admincenter.mapper.center_consumer_mapper">
+    <insert id="addGroup" parameterType="center_consumer_group" useGeneratedKeys="true"  keyProperty="id">
+        insert into center_consumer_group(topicName, groupName,offsetReset,description,notifier,par_assign_strategy)
+                values(#{topicName}, #{groupName}, #{offsetReset}, #{description}, #{notifier},#{par_assign_strategy})
+    </insert>
+    <update id="updateGroup" parameterType="center_consumer_group">
+        update center_consumer_group
+        SET description=#{description},notifier=#{notifier}
+        where id=#{id}
+    </update>
+    <select id="checkIsExistsGroup" parameterType="center_consumer_group" resultType="int">
+        select COUNT(*) from center_consumer_group where topicName=#{topicName} and groupName=#{groupName}
+    </select>
+    <select id="findGroup" resultType="center_consumer_group">
+        SELECT *
+        FROM center_consumer_group
+        where topicName=#{0}
+    </select>
+
+    <select id="findGroupOne" resultType="center_consumer_group">
+        SELECT *
+        FROM center_consumer_group
+        where id=#{0}
+    </select>
+
+
+    <select id="findConsumer" resultType="center_consumer_task">
+        SELECT *
+        FROM center_consumer_task
+        where groupId=#{0}
+    </select>
+
+    <select id="checkIsExistsConsumer"  resultType="int">
+        select COUNT(*) from center_consumer_task where   taskCode=#{0}
+    </select>
+
+    <insert id="addConsumer" parameterType="center_consumer_task" useGeneratedKeys="true"  keyProperty="id">
+        insert into center_consumer_task(
+        groupId, taskCode,getType,status,operateType,operateUrl
+        ,batchNumber,operateOutTime,hea_int_ms,ses_timeout_ms,max_poll_ms,execCode)
+        values(
+        #{groupId}, #{taskCode}, #{getType}, #{status}, #{operateType},#{operateUrl}
+        ,#{batchNumber},#{operateOutTime},#{hea_int_ms},#{ses_timeout_ms},#{max_poll_ms},#{execCode})
+    </insert>
+    <delete id="deleteConsumer" >
+        delete from center_consumer_task
+        where id=#{0}
+    </delete>
+    <select id="getConsumerById" resultType="center_consumer_task">
+        SELECT *
+        FROM center_consumer_task
+        where id=#{0}
+    </select>
+    <update id="updateConsumer" parameterType="center_consumer_task">
+        update center_consumer_task
+        SET getType=#{getType},status=#{status},operateType=#{operateType},operateUrl=#{operateUrl}
+        ,batchNumber=#{batchNumber},operateOutTime=#{operateOutTime},hea_int_ms=#{hea_int_ms}
+        ,ses_timeout_ms=#{ses_timeout_ms},max_poll_ms=#{max_poll_ms},execCode=#{execCode}
+        where id=#{id}
+    </update>
+    <select id="getSyncZK" resultType="center_consumer_sync">
+        SELECT cct.taskCode
+			 ,cct.getType
+			 ,cct.operateType
+			 ,cct.operateUrl
+			 ,cct.batchNumber
+			 ,cct.operateOutTime
+			 ,cct.hea_int_ms
+			 ,cct.ses_timeout_ms
+			 ,cct.max_poll_ms
+			 ,cct.execCode
+			 ,cct.modifytime
+			 ,ccg.groupName
+			 ,ccg.notifier
+			 ,ccg.offsetReset
+			 ,ccg.par_assign_strategy
+			 ,ccg.topicName
+			 ,cct.`status` as taskStatus
+        FROM  center_execution_list cel
+              left join center_consumer_task cct on cel.`code`=cct.execCode
+              left join center_consumer_group ccg on cct.groupId=ccg.id
+        where cel.`status`=1
+    </select>
+    <select id="getSyncDisabledZK" resultType="center_consumer_sync">
+        SELECT cct.taskCode
+			 ,cct.getType
+			 ,cct.operateType
+			 ,cct.operateUrl
+			 ,cct.batchNumber
+			 ,cct.operateOutTime
+			 ,cct.hea_int_ms
+			 ,cct.ses_timeout_ms
+			 ,cct.max_poll_ms
+			 ,cct.execCode
+			 ,cct.modifytime
+			 ,ccg.groupName
+			 ,ccg.notifier
+			 ,ccg.offsetReset
+			 ,ccg.par_assign_strategy
+			 ,ccg.topicName
+			 ,cct.`status` as taskStatus
+        FROM  center_execution_list cel
+              left join center_consumer_task cct on cel.`code`=cct.execCode
+              left join center_consumer_group ccg on cct.groupId=ccg.id
+        where cct.execCode=#{0}
+    </select>
+    <select id="checkTopicIsExistsConsumerGroup"  resultType="int">
+        select COUNT(*) from center_consumer_group where   topicName=#{0}
+    </select>
+
+    <select id="checkExecIsExistsConsumer"  resultType="int">
+        select COUNT(*) from center_consumer_task where   execCode=#{0}
+    </select>
+</mapper>

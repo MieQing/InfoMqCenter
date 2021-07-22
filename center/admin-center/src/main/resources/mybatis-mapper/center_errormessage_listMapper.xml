@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.mq.admincenter.mapper.center_errormessage_mapper">
+    <select id="getList" resultType="Error_Message">
+        select *
+        from `center_errormessage_list` ls1
+        join  (
+                SELECT id
+                FROM `center_errormessage_list`
+                <where>
+                    <if test="createTimeStart != null ">
+                        and `createtime` &gt;= #{createTimeStart}
+                    </if>
+                    <if test="createTimeEnd != null ">
+                        and `createtime` &lt;= #{createTimeEnd}
+                    </if>
+                    <if test="status != null ">
+                        and `status` = #{status}
+                    </if>
+                    <if test="topicName != null and  topicName != ''">
+                        and `topicName` = #{topicName}
+                    </if>
+                </where>
+                order by createTime desc
+                LIMIT #{from},#{size}
+        ) ls2 on ls1.id=ls2.id
+    </select>
+    <select id="getCount" resultType="int">
+        select count(*)
+        from `center_errormessage_list`
+        <where>
+            <if test="createTimeStart != null ">
+                and `createtime` &gt;= #{createTimeStart}
+            </if>
+            <if test="createTimeEnd != null ">
+                and `createtime` &lt;= #{createTimeEnd}
+            </if>
+            <if test="status != null ">
+                and `status` = #{status}
+            </if>
+            <if test="topicName != null  and  topicName != '' ">
+                and `topicName` = #{topicName}
+            </if>
+        </where>
+    </select>
+    <select id="findOne" resultType="Error_Message">
+        SELECT *
+        FROM center_errormessage_list
+        where id=#{0}
+    </select>
+    <update id="ignore" parameterType="Error_Message">
+        update center_errormessage_list
+        SET status=2
+        where id=#{id}
+    </update>
+    <update id="finish" parameterType="Error_Message">
+        update center_errormessage_list
+        SET status=1
+        where id=#{id}
+    </update>
+</mapper>

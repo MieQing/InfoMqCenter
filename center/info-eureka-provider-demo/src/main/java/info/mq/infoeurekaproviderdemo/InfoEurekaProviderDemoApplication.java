@@ -1,0 +1,15 @@
+package info.mq.infoeurekaproviderdemo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+
+@SpringBootApplication
+@EnableDiscoveryClient
+public class InfoEurekaProviderDemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(InfoEurekaProviderDemoApplication.class, args);
+    }
+
+}

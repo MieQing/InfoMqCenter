@@ -1,0 +1,41 @@
+project:
+  env: dev
+server:
+  port: 6900
+  tomcat:
+    max-http-form-post-size: -1
+zookeeper:
+  address:  #ZK连接地址 格式如111.111.111.111:10086 后面不需要加上根目录路径
+  rootnode: /MqCenter  #ZK节点根目录
+  actConsumer: /MqCenter/ConsumerList #当前运行的消费者执行器根节点，此处如果有消费者接入，会创建临时节点，同时center会监视是否掉线
+  conTaskList: /MqCenter/ConTaskList #每个Consumer中具体的执行任务
+  workList: /MqCenter/WorkList #每个Consumer中具体的执行线程
+
+spring:
+  datasource:
+    url: #数据库地址 jdbc:mysql://111.111.111.111:3306/info_mq_center?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: #数据库连接账号
+    password: #数据库连接密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: #邮件服务器地址 如：smtp.qq.com
+    port: 465
+    username: #发邮件的账号
+    password: #邮件密码
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+  kafka:
+    bootstrap-servers: #kafaka连接地址 111.111.111.111:9093
+
+mybatis:
+  type-aliases-package: info.mq.admincenter.model
+  mapper-locations: classpath:/mybatis-mapper/*Mapper.xml
+
+errormailer: #如果有消费者节点掉线时的邮件通知人 aaa@mail.com
